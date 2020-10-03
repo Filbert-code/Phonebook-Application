@@ -5,8 +5,6 @@
 int main()
 {
     // file extract variables
-    string fName, lName;
-    int phoneNum;
     ifstream file("phonebook.txt");
 
     // ----- getting number of lines in the file
@@ -15,19 +13,24 @@ int main()
     while(getline(file, line))
         size++;
     size--;
+    // get back to the beginning of the file
+    file.clear();
+    file.seekg(0);
     // ----->
 
-    int **arr = new int*[size]; // creating a 2d array
-    for(int i = 0; i < size; ++i)
-        arr[i] = new int[3]; // each subarray stores 3 values
+    Contact *arr = new Contact[size]; // creating a 2d array
 
+    // ----- creating an array of Contact objects with file data
     string fName, lName;
     int phoneNum;
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < size + 1; ++i)
     {
         file >> fName >> lName >> phoneNum;
-        
+        Contact contact(fName, lName, phoneNum);
+        arr[i] = contact;
     }
+
+    
 
     //file >> fName >> lName >> phoneNum;
     //cout << fName << " " << lName << " " << phoneNum << endl;
