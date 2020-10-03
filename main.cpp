@@ -1,6 +1,6 @@
-#include <iostream>
 #include <fstream>
 #include "Contact.h"
+#include "Phonebook.h"
 
 int main()
 {
@@ -30,7 +30,8 @@ int main()
         arr[i] = contact;
     }
 
-    
+    Phonebook pb("phonebook.txt");
+    pb.print();
 
     //file >> fName >> lName >> phoneNum;
     //cout << fName << " " << lName << " " << phoneNum << endl;

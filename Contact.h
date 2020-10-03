@@ -1,6 +1,7 @@
 #ifndef CONTACT_H
 #define CONTACT_H
 using namespace std;
+#include <iostream>
 #include <string>
 
 class Contact
