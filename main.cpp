@@ -18,7 +18,7 @@ int main()
     file.seekg(0);
     // ----->
 
-    Contact *arr = new Contact[size]; // creating a 2d array
+    Contact *arr = new Contact[size];
 
     // ----- creating an array of Contact objects with file data
     string fName, lName;
