@@ -1,7 +1,6 @@
 #include <iostream>
-#include <string>
 #include <fstream>
-using namespace std;
+#include "Contact.h"
 
 int main()
 {
@@ -27,9 +26,7 @@ int main()
     for(int i = 0; i < 5; ++i)
     {
         file >> fName >> lName >> phoneNum;
-        arr[i][0] = fName;
-        arr[i][1] = lName;
-        arr[i][2] = 
+        
     }
 
     //file >> fName >> lName >> phoneNum;
