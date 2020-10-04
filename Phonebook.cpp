@@ -25,7 +25,8 @@ int Phonebook::get_file_size()
     while(getline(file, line))
         // increment size on each line of the file
         size++;
-    --size; // deincrement size to match 0-indexing of arrays
+    if(size !=0)
+        --size; // deincrement size to match 0-indexing of arrays
     return size;
 }
 
@@ -96,7 +97,21 @@ int Phonebook::search(string fName, string lName)
         if(arr[i].get_fName() == fName && arr[i].get_lName() == lName)
             return arr[i].get_phoneNum();
     }
-    return -1;
+    return -1; 
+}
+
+/*
+    Overloaded search method that allows the search to include a phone number. 
+    Used for not allowing duplicates during adding operation. 
+*/
+int Phonebook::search(string fName, string lName, int phoneNum)
+{
+    for(int i = 0; i < numOfContacts + 1; i++)
+    {
+        if(arr[i].get_fName() == fName && arr[i].get_lName() == lName && arr[i].get_phoneNum() == phoneNum)
+            return arr[i].get_phoneNum();
+    }
+    return -1; 
 }
 
 /*
@@ -120,6 +135,43 @@ void Phonebook::update_phonebook()
         file << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
     }
     file << arr[numOfContacts].get_fName() << " " << arr[numOfContacts].get_lName() << " " << arr[numOfContacts].get_phoneNum();
+}
+
+void Phonebook::run()
+{
+    cout << "***ALEX'S PHONEBOOK APPLICATION***" << endl;
+    cout << "Please choose an operation:" << endl;
+    bool running = true;
+    while(running)
+    {
+        cout << "A(Add) | S (Search) | D(Delete) |L(List) |Q(Quit): ";
+        char userInput;
+        cin >> userInput;
+        switch(userInput)
+        {
+            case 'A': 
+            {
+                // switch_case_add
+                cout << "Enter name: ";
+                string fNameInput;
+                string lNameInput;
+                cin >> fNameInput >> lNameInput;
+                cout << "Enter phone: ";
+                int phoneInput;
+                cin >> phoneInput;
+
+                // checks if user is creating a duplicate contact
+                if(search(fNameInput, lNameInput, phoneInput) != -1)
+                {
+                    add(fNameInput, lNameInput, phoneInput);
+                }
+                break;
+            }
+            case 'Q':
+                running = false;
+                break;
+        }
+    }
 }
 
 void Phonebook::print() 

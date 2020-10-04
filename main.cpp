@@ -6,8 +6,6 @@
 int main()
 {
     Phonebook pb("phonebook.txt");
-
-    pb.list();
-    pb.update_phonebook();
-    //pb.print();
+    pb.run();
+    // remember to update phonebook
 }
