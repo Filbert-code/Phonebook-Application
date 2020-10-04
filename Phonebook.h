@@ -17,7 +17,7 @@ class Phonebook
         int get_file_size(); // returns number of lines in the .txt file
         void fillArray(Contact *&arr, int size); // creates a dynamic array of Contact objects with the file data
         void add(string fName, string lName, int phoneNum);
-        void search();
+        int search(string fName, string lName);
         void remove(string fName, string lName);
         void list();
         void update_phonebook();

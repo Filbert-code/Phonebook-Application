@@ -64,21 +64,8 @@ void Phonebook::add(string fName, string lName, int phoneNum)
 }
 
 /*
-    Update the phonebook.txt file when the user exits the program.
-*/
-void Phonebook::update_phonebook()
-{
-    ofstream file(fileName, ofstream::trunc);
-    for(int i = 0; i < numOfContacts; ++i)
-    {
-        file << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
-    }
-    file << arr[numOfContacts].get_fName() << " " << arr[numOfContacts].get_lName() << " " << arr[numOfContacts].get_phoneNum();
-}
-
-/*
     Deletes the Contact object associated with the given first and last 
-    name parameters. The contact is deleted from the array and the 
+    name arguments. The contact is deleted from the array and the 
     .txt file. 
 */
 void Phonebook::remove(string fName, string lName) 
@@ -96,6 +83,43 @@ void Phonebook::remove(string fName, string lName)
             break;
         }
     }
+}
+
+/*
+    Returns the phone number of the Contact with the associated fName and lName 
+    given as arguments. 
+*/
+int Phonebook::search(string fName, string lName)
+{
+    for(int i = 0; i < numOfContacts + 1; i++)
+    {
+        if(arr[i].get_fName() == fName && arr[i].get_lName() == lName)
+            return arr[i].get_phoneNum();
+    }
+    return -1;
+}
+
+/*
+    Outputs the first 5 contact entries to the console
+*/
+void Phonebook::list()
+{
+    for(int i = 0; i < 5; ++i)
+        cout << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
+    cout << "..." << endl;
+}
+
+/*
+    Update the phonebook.txt file when the user exits the program.
+*/
+void Phonebook::update_phonebook()
+{
+    ofstream file(fileName, ofstream::trunc); // deletes all contents of the file
+    for(int i = 0; i < numOfContacts; ++i) // repopulate the file with the current array state
+    {
+        file << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
+    }
+    file << arr[numOfContacts].get_fName() << " " << arr[numOfContacts].get_lName() << " " << arr[numOfContacts].get_phoneNum();
 }
 
 void Phonebook::print() 
