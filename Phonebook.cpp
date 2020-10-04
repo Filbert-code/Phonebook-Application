@@ -3,15 +3,18 @@
 
 Phonebook::Phonebook(string fileName)
 {
-    int size = get_file_length(); // get the number of Contacts 
-    Contact *arr = new Contact[size];
+    this->fileName = fileName;
+    int size = get_file_size();
+    this->fileSize = size;
+    this->arr = new Contact[fileSize];
+    fillArray(arr, fileSize);
 }
 
 /*
     Returns the number of lines in the .txt file; the name was given 
     as a parameter for Phonebook. 
 */
-int Phonebook::get_file_length() 
+int Phonebook::get_file_size() 
 {
     ifstream file(fileName); // create file object 
 
@@ -21,7 +24,6 @@ int Phonebook::get_file_length()
     while(getline(file, line))
         // increment size on each line of the file
         size++;
-    size--; // deincrement due to 0-index nature of arrays
     return size;
 }
 
@@ -29,16 +31,14 @@ int Phonebook::get_file_length()
     Creates a dynamic array of Contact objects and points the private Phonebook
     variable named arr to the reference of the dynamic array.  
 */
-void Phonebook::fillArray(int size) 
+void Phonebook::fillArray(Contact *&arr, int size) 
 {
     ifstream file(fileName); // create file object
-
-    Contact *arr = new Contact[size]; // initialize dynamic Contact array
 
     // ----- creating an array of Contact objects with file data
     string fName, lName;
     int phoneNum;
-    for(int i = 0; i < size + 1; ++i)
+    for(int i = 0; i < size; ++i)
     {
         file >> fName >> lName >> phoneNum;
         Contact contact(fName, lName, phoneNum);
@@ -48,5 +48,15 @@ void Phonebook::fillArray(int size)
 
 void Phonebook::print() 
 {
-    arr[0].print();
+    // print first 5 and last 5 rows of the student data from the array
+    cout << "First 5 rows: " << endl;
+    for(int i = 0; i < 5; ++i)
+    {
+        cout << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
+    }
+    cout << "Last 5 rows: " << endl;
+    for(int i = fileSize - 5; i < fileSize; ++i)
+    {
+        cout << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
+    }
 }
