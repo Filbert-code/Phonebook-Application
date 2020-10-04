@@ -2,6 +2,10 @@
 // Date: 10/4/2020
 // Course: CS 300B
 // Assignment: Homework 1
+// Class purpose: 
+//      To make an object that will create a dynamic array of Contact objects 
+//      with functions to add, search, delete, and list the contents of the 
+//      array. 
 #include "Phonebook.h"
 #include <fstream>
 
@@ -18,6 +22,14 @@ Phonebook::Phonebook(string fileName)
     this->numOfContacts = size; // Total number of contact entries
     this->arr = new Contact[capacity];
     fillArray(arr, numOfContacts);
+}
+
+/*
+    Destructor for deleting the dynamic Contact array.
+*/
+Phonebook::~Phonebook()
+{
+    delete[] arr;
 }
 
 /*
@@ -102,9 +114,7 @@ void Phonebook::remove(string fName, string lName)
             --numOfContacts;
             // shift all array elements 1 position to the left
             for(int k = i; k < numOfContacts; ++k)
-            {
                 arr[k] = arr[k + 1];
-            }
             break;
         }
     }
@@ -149,7 +159,7 @@ void Phonebook::list()
 }
 
 /*
-    Update the phonebook.txt file when the user exits the program.
+    Updates the phonebook.txt file when the user exits the program.
 */
 void Phonebook::update_phonebook()
 {
@@ -183,9 +193,7 @@ bool Phonebook::name_uppercase_check(string fName, string lName)
 {
     // check if all string arguments are uppercase
     if(!is_all_upper(fName) || !is_all_upper(lName))
-    {
         return false;
-    }
     return true;
 }
 
@@ -209,8 +217,7 @@ bool Phonebook::check_if_name_exists(string fName, string lName)
 void Phonebook::run_switch_add_case()
 {
     cout << "Enter name: ";
-    string fNameInput;
-    string lNameInput;
+    string fNameInput, lNameInput;
     cin >> fNameInput >> lNameInput;
     cout << "Enter phone: ";
     int phoneInput;
@@ -218,9 +225,7 @@ void Phonebook::run_switch_add_case()
 
     // checks if user is creating a duplicate contact
     if(!check_if_name_exists(fNameInput, lNameInput))
-    {
         add(fNameInput, lNameInput, phoneInput);
-    }
 }
 
 /*
@@ -230,8 +235,7 @@ void Phonebook::run_switch_add_case()
 void Phonebook::run_switch_search_case()
 {
     cout << "Enter name: ";
-    string fNameInput;
-    string lNameInput;
+    string fNameInput, lNameInput;
     cin >> fNameInput >> lNameInput;
     // checks if the inputs are in uppercase
     if(!name_uppercase_check(fNameInput, lNameInput))
@@ -241,9 +245,7 @@ void Phonebook::run_switch_search_case()
     }
     // checks if the name exists in the array
     if(check_if_name_exists(fNameInput, lNameInput))
-    {
         cout << "Phone number: " << search(fNameInput, lNameInput) << endl;
-    }
     else 
         cout << "Name not found." << endl;
 }
@@ -255,8 +257,7 @@ void Phonebook::run_switch_search_case()
 void Phonebook::run_switch_del_case()
 {
     cout << "Enter name: ";
-    string fNameInput;
-    string lNameInput;
+    string fNameInput, lNameInput;
     cin >> fNameInput >> lNameInput;
     // checks if the inputs are in uppercase
     if(!name_uppercase_check(fNameInput, lNameInput))
@@ -266,9 +267,7 @@ void Phonebook::run_switch_del_case()
     }
     // checks if there is a matching name in the array to delete
     if(check_if_name_exists(fNameInput, lNameInput))
-    {
         remove(fNameInput, lNameInput);
-    }
     else
         cout << "Name not found." << endl;
 }
