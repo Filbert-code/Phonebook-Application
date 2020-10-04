@@ -58,6 +58,9 @@ void Phonebook::fillArray(Contact *&arr, int size)
 
 void Phonebook::add(string fName, string lName, int phoneNum)
 {
+    // check if all strings arguments are uppercase
+    if(!name_uppercase_check(fName, lName))
+        return;
     ++numOfContacts;
     // check if array has enough space. If not, double the size of the array
     if(numOfContacts> capacity)
@@ -78,6 +81,8 @@ void Phonebook::add(string fName, string lName, int phoneNum)
 */
 void Phonebook::remove(string fName, string lName) 
 {
+    // check if all strings arguments are uppercase
+    name_uppercase_check(fName, lName);
     for(int i = 0; i < numOfContacts; i++)
     {
         if(arr[i].get_fName() == fName && arr[i].get_lName() == lName)
@@ -99,6 +104,8 @@ void Phonebook::remove(string fName, string lName)
 */
 int Phonebook::search(string fName, string lName)
 {
+    // check if all strings arguments are uppercase
+    name_uppercase_check(fName, lName);
     for(int i = 0; i < numOfContacts; i++)
     {
         if(arr[i].get_fName() == fName && arr[i].get_lName() == lName)
@@ -129,6 +136,11 @@ void Phonebook::list()
     int listSize = 5;
     if((numOfContacts + 1) < listSize)
         listSize = numOfContacts;
+    if(listSize == 0)
+    {
+        cout << "<Empty>" << endl;
+        return;
+    }
     for(int i = 0; i < listSize; ++i)
         cout << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
     if(listSize >= 5)
@@ -145,7 +157,30 @@ void Phonebook::update_phonebook()
     {
         file << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
     }
-    file << arr[numOfContacts - 1].get_fName() << " " << arr[numOfContacts - 1].get_lName() << " " << arr[numOfContacts - 1].get_phoneNum();
+    if(numOfContacts != 0)
+        file << arr[numOfContacts - 1].get_fName() << " " << arr[numOfContacts - 1].get_lName() << " " << arr[numOfContacts - 1].get_phoneNum();
+}
+
+/*
+    Checks the inputed string whether all letters are uppercase or not.
+*/
+bool Phonebook::is_all_upper(const std::string& word)
+{
+    for(auto& c: word) 
+        if(!isupper(static_cast<unsigned char>(c))) 
+            return false;
+    return true;
+}
+
+bool Phonebook::name_uppercase_check(string fName, string lName)
+{
+    // check if all strings arguments are uppercase
+    if(!is_all_upper(fName) || !is_all_upper(lName))
+    {
+        cout << "Enter names in uppercase letters." << endl;
+        return false;
+    }
+    return true;
 }
 
 /*
@@ -161,7 +196,12 @@ void Phonebook::run()
     {
         cout << "A(Add) | S (Search) | D(Delete) |L(List) |Q(Quit): ";
         char userInput;
-        cin >> userInput;
+        cin >> userInput; // get user input
+
+        // check if user entered a lowercase character
+        if(islower(userInput))
+            cout << "Enter operations in uppercase letters." << endl;
+
         switch(userInput)
         {
             case 'A': 
@@ -193,7 +233,7 @@ void Phonebook::run()
                 if(phoneNum != -1)
                     cout << "Phone number: " << phoneNum << endl;
                 else 
-                    cout << "Name not found" << endl;
+                    cout << "Name not found." << endl;
                 break;
             }
             case 'D':

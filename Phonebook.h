@@ -27,6 +27,8 @@ class Phonebook
         void remove(string fName, string lName);
         void list();
         void update_phonebook();
+        bool is_all_upper(const std::string& word);
+        bool name_uppercase_check(string fName, string lName);
 };
 
 #endif
