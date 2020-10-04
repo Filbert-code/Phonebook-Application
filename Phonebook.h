@@ -18,8 +18,9 @@ class Phonebook
         void fillArray(Contact *&arr, int size); // creates a dynamic array of Contact objects with the file data
         void add(string fName, string lName, int phoneNum);
         void search();
-        void remove();
+        void remove(string fName, string lName);
         void list();
+        void update_phonebook();
 
         void print();
 };

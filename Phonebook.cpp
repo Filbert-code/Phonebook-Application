@@ -63,6 +63,41 @@ void Phonebook::add(string fName, string lName, int phoneNum)
     this->arr[numOfContacts] = contact;
 }
 
+/*
+    Update the phonebook.txt file when the user exits the program.
+*/
+void Phonebook::update_phonebook()
+{
+    ofstream file(fileName, ofstream::trunc);
+    for(int i = 0; i < numOfContacts; ++i)
+    {
+        file << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
+    }
+    file << arr[numOfContacts].get_fName() << " " << arr[numOfContacts].get_lName() << " " << arr[numOfContacts].get_phoneNum();
+}
+
+/*
+    Deletes the Contact object associated with the given first and last 
+    name parameters. The contact is deleted from the array and the 
+    .txt file. 
+*/
+void Phonebook::remove(string fName, string lName) 
+{
+    for(int i = 0; i < numOfContacts + 1; i++)
+    {
+        if(arr[i].get_fName() == fName && arr[i].get_lName() == lName)
+        {
+            --numOfContacts;
+            // shift all array elements 1 position to the left
+            for(int k = i; k < numOfContacts + 1; ++k)
+            {
+                arr[k] = arr[k + 1];
+            }
+            break;
+        }
+    }
+}
+
 void Phonebook::print() 
 {
     // print first 5 and last 5 rows of the student data from the array
@@ -76,4 +111,5 @@ void Phonebook::print()
     {
         cout << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
     }
+    cout << "Number of contacts:" << numOfContacts << endl << endl;
 }
