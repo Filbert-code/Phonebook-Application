@@ -22,13 +22,17 @@ class Phonebook
         int get_file_size(); // returns number of lines in the .txt file
         void fillArray(Contact *&arr, int size); // creates a dynamic array of Contact objects with the file data
         void add(string fName, string lName, int phoneNum);
-        int search(string fName, string lName);
-        int search(string fName, string lName, int phoneNum);
         void remove(string fName, string lName);
+        int search(string fName, string lName);
         void list();
         void update_phonebook();
-        bool is_all_upper(const std::string& word);
+        bool is_all_upper(string& word);
         bool name_uppercase_check(string fName, string lName);
+        bool check_if_name_exists(string fName, string lName);
+        void run_switch_add_case();
+        void run_switch_search_case();
+        void run_switch_del_case();
+        
 };
 
 #endif
