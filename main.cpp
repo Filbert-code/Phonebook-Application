@@ -6,5 +6,6 @@
 int main()
 {
     Phonebook pb("phonebook.txt");
+    pb.add("Alex", "Filbert", 2068491090);
     pb.print();
 }
