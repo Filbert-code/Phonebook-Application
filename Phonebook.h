@@ -1,3 +1,7 @@
+// Author: Alex Filbert
+// Date: 10/4/2020
+// Course: CS 300B
+// Assignment: Homework 1
 #ifndef PHONEBOOK_H
 #define PHONEBOOK_H
 using namespace std;
@@ -23,8 +27,6 @@ class Phonebook
         void remove(string fName, string lName);
         void list();
         void update_phonebook();
-
-        void print();
 };
 
 #endif

@@ -1,11 +1,20 @@
+// Author: Alex Filbert
+// Date: 10/4/2020
+// Course: CS 300B
+// Assignment: Homework 1
 #include "Phonebook.h"
 #include <fstream>
 
+/*
+    Constructor with 1 argument that stores the name of the file. 
+*/
 Phonebook::Phonebook(string fileName)
 {
     this->fileName = fileName;
     int size = get_file_size();
     this->capacity = size; // Total capacity of the array
+    if(capacity == 0)
+        capacity = 5;
     this->numOfContacts = size; // Total number of contact entries
     this->arr = new Contact[capacity];
     fillArray(arr, numOfContacts);
@@ -25,8 +34,6 @@ int Phonebook::get_file_size()
     while(getline(file, line))
         // increment size on each line of the file
         size++;
-    if(size !=0)
-        --size; // deincrement size to match 0-indexing of arrays
     return size;
 }
 
@@ -41,7 +48,7 @@ void Phonebook::fillArray(Contact *&arr, int size)
     // ----- creating an array of Contact objects with file data
     string fName, lName;
     int phoneNum;
-    for(int i = 0; i < size + 1; ++i)
+    for(int i = 0; i < size; ++i)
     {
         file >> fName >> lName >> phoneNum;
         Contact contact(fName, lName, phoneNum);
@@ -53,7 +60,7 @@ void Phonebook::add(string fName, string lName, int phoneNum)
 {
     ++numOfContacts;
     // check if array has enough space. If not, double the size of the array
-    if(numOfContacts > capacity)
+    if(numOfContacts> capacity)
     {
         capacity *= 2; // double the capacity
         this->arr = new Contact[capacity];
@@ -61,7 +68,7 @@ void Phonebook::add(string fName, string lName, int phoneNum)
     }
     
     Contact contact(fName, lName, phoneNum);
-    this->arr[numOfContacts] = contact;
+    this->arr[numOfContacts - 1] = contact;
 }
 
 /*
@@ -71,13 +78,13 @@ void Phonebook::add(string fName, string lName, int phoneNum)
 */
 void Phonebook::remove(string fName, string lName) 
 {
-    for(int i = 0; i < numOfContacts + 1; i++)
+    for(int i = 0; i < numOfContacts; i++)
     {
         if(arr[i].get_fName() == fName && arr[i].get_lName() == lName)
         {
             --numOfContacts;
             // shift all array elements 1 position to the left
-            for(int k = i; k < numOfContacts + 1; ++k)
+            for(int k = i; k < numOfContacts; ++k)
             {
                 arr[k] = arr[k + 1];
             }
@@ -92,7 +99,7 @@ void Phonebook::remove(string fName, string lName)
 */
 int Phonebook::search(string fName, string lName)
 {
-    for(int i = 0; i < numOfContacts + 1; i++)
+    for(int i = 0; i < numOfContacts; i++)
     {
         if(arr[i].get_fName() == fName && arr[i].get_lName() == lName)
             return arr[i].get_phoneNum();
@@ -106,7 +113,7 @@ int Phonebook::search(string fName, string lName)
 */
 int Phonebook::search(string fName, string lName, int phoneNum)
 {
-    for(int i = 0; i < numOfContacts + 1; i++)
+    for(int i = 0; i < numOfContacts; i++)
     {
         if(arr[i].get_fName() == fName && arr[i].get_lName() == lName && arr[i].get_phoneNum() == phoneNum)
             return arr[i].get_phoneNum();
@@ -119,9 +126,13 @@ int Phonebook::search(string fName, string lName, int phoneNum)
 */
 void Phonebook::list()
 {
-    for(int i = 0; i < 5; ++i)
+    int listSize = 5;
+    if((numOfContacts + 1) < listSize)
+        listSize = numOfContacts;
+    for(int i = 0; i < listSize; ++i)
         cout << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
-    cout << "..." << endl;
+    if(listSize >= 5)
+        cout << "..." << endl;
 }
 
 /*
@@ -130,13 +141,17 @@ void Phonebook::list()
 void Phonebook::update_phonebook()
 {
     ofstream file(fileName, ofstream::trunc); // deletes all contents of the file
-    for(int i = 0; i < numOfContacts; ++i) // repopulate the file with the current array state
+    for(int i = 0; i < numOfContacts - 1; ++i) // repopulate the file with the current array state
     {
         file << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
     }
-    file << arr[numOfContacts].get_fName() << " " << arr[numOfContacts].get_lName() << " " << arr[numOfContacts].get_phoneNum();
+    file << arr[numOfContacts - 1].get_fName() << " " << arr[numOfContacts - 1].get_lName() << " " << arr[numOfContacts - 1].get_phoneNum();
 }
 
+/*
+    A while loop that continuously prompts the user with choices to 
+    iteract with the phonebook data. Ends when running = false.
+*/
 void Phonebook::run()
 {
     cout << "***ALEX'S PHONEBOOK APPLICATION***" << endl;
@@ -151,7 +166,7 @@ void Phonebook::run()
         {
             case 'A': 
             {
-                // switch_case_add
+                // add case
                 cout << "Enter name: ";
                 string fNameInput;
                 string lNameInput;
@@ -161,31 +176,48 @@ void Phonebook::run()
                 cin >> phoneInput;
 
                 // checks if user is creating a duplicate contact
-                if(search(fNameInput, lNameInput, phoneInput) != -1)
+                if(search(fNameInput, lNameInput, phoneInput) == -1)
                 {
                     add(fNameInput, lNameInput, phoneInput);
                 }
                 break;
             }
+            case 'S': 
+            {
+                // search case
+                cout << "Enter name: ";
+                string fNameInput;
+                string lNameInput;
+                cin >> fNameInput >> lNameInput;
+                int phoneNum = search(fNameInput, lNameInput);
+                if(phoneNum != -1)
+                    cout << "Phone number: " << phoneNum << endl;
+                else 
+                    cout << "Name not found" << endl;
+                break;
+            }
+            case 'D':
+            {
+                // delete case
+                cout << "Enter name: ";
+                string fNameInput;
+                string lNameInput;
+                cin >> fNameInput >> lNameInput;
+                remove(fNameInput, lNameInput);
+                break;
+            }
+            case 'L': 
+            {
+                // list case
+                list(); 
+                break;
+            }
+                
             case 'Q':
+                // quit case
+                update_phonebook();
                 running = false;
                 break;
         }
     }
-}
-
-void Phonebook::print() 
-{
-    // print first 5 and last 5 rows of the student data from the array
-    cout << "First 5 rows: " << endl;
-    for(int i = 0; i < 5; ++i)
-    {
-        cout << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
-    }
-    cout << "Last 5 rows: " << endl;
-    for(int i = numOfContacts - 4; i < numOfContacts + 1; ++i)
-    {
-        cout << arr[i].get_fName() << " " << arr[i].get_lName() << " " << arr[i].get_phoneNum() << endl;
-    }
-    cout << "Number of contacts:" << numOfContacts << endl << endl;
 }
